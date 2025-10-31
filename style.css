@@ -1,0 +1,302 @@
+/* --- Global Styles & Variables --- */
+:root {
+    --main-orange: #F97316;
+    --logo-text-color: #FECBAB;
+    --subtitle-color: #FDBA74;
+    --white: #FFFFFF;
+    --page-bg: #FFFBF8;
+    --border-highlight: #FFF4EE;
+    --light-gray: #E5E7EB; /* New */
+    --text-gray: #6B7280;   /* New */
+    --text-dark: #374151;  /* New */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--page-bg);
+    /* A subtle gradient adds a professional touch */
+    background-image: linear-gradient(170deg, var(--page-bg) 0%, var(--white) 100%);
+    color: var(--text-dark);
+    min-height: 100vh; /* Use min-height */
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+/* --- Header & Logo --- */
+header {
+    padding: 1.5rem 4rem;
+    border-bottom: 1px solid var(--border-highlight);
+    width: 100%;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo-icon {
+    width: 32px;
+    height: 32px;
+}
+
+.logo-text {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--logo-text-color);
+    line-height: 1;
+}
+
+/* --- Main Content Layout --- */
+main {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+}
+
+/* --- NEW: App Card --- */
+/* This is the new wrapper for your app */
+.app-card {
+    width: 100%;
+    max-width: 960px; /* Wider card for side-by-side */
+    background-color: var(--white);
+    border-radius: 1.5rem; /* 24px */
+    /* A soft, modern shadow using your brand color */
+    box-shadow: 0 20px 40px -10px rgba(249, 115, 22, 0.1);
+    padding: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    border: 1px solid var(--border-highlight);
+}
+
+.text-container,
+.main-content-container {
+    flex: 1; /* Each side takes up half the space */
+}
+
+/* --- Left-Side Text --- */
+.text-container {
+    padding-right: 2rem;
+}
+
+.text-container h1 {
+    font-size: 3rem; /* 48px */
+    font-weight: 700;
+    color: var(--main-orange);
+    line-height: 1.2;
+}
+
+.text-container p {
+    font-size: 1.5rem; /* 24px */
+    font-weight: 400;
+    color: var(--subtitle-color);
+    font-style: italic;
+    margin-top: 0.5rem;
+}
+
+/* --- Right-Side Uploader --- */
+.main-content-container {
+    width: 100%;
+    max-width: 400px; /* Constrain the uploader width */
+}
+
+/* --- Drop Zone --- */
+.drop-zone {
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 1 / 1;
+    border: 2px dashed var(--light-gray); /* Softer default border */
+    border-radius: 1rem; /* 16px */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    background-color: #fafafa;
+    transition: all 0.3s ease;
+}
+
+.drop-zone:hover {
+    background-color: var(--border-highlight);
+    border-color: var(--main-orange);
+}
+
+.drop-zone.drag-over {
+    background-color: var(--border-highlight);
+    border-color: var(--main-orange);
+    border-style: solid;
+    transform: scale(1.02);
+}
+
+.drop-icon {
+    font-size: 4rem; /* 64px */
+    color: var(--main-orange);
+    margin-bottom: 1rem;
+    pointer-events: none;
+}
+
+.drop-text {
+    font-size: 1.75rem; /* 28px */
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+    pointer-events: none;
+}
+
+.upload-button {
+    background-color: var(--main-orange);
+    color: var(--white);
+    padding: 0.5rem 1.25rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    display: inline-block;
+    pointer-events: none;
+    transition: transform 0.2s ease;
+}
+
+.drop-zone:hover .upload-button {
+    transform: scale(1.05);
+}
+
+/* --- Result Display (State 2) --- */
+.result-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.image-preview-container {
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 1 / 1;
+    border: 2px solid var(--border-highlight);
+    border-radius: 1rem;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    /* Add a subtle inner shadow to pop the image */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+#preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    width: 100%;
+    gap: 0.75rem;
+}
+
+.download-button,
+.start-over-button {
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem; /* Less rounded for a modern feel */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex; /* To align icon and text */
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.download-button {
+    background-color: var(--main-orange);
+    color: var(--white);
+    border: 2px solid var(--main-orange);
+}
+
+.download-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(249, 115, 22, 0.3);
+}
+
+.start-over-button {
+    background-color: transparent;
+    color: var(--text-gray);
+    border: 2px solid var(--light-gray);
+}
+
+.start-over-button:hover {
+    background-color: var(--border-highlight);
+    border-color: var(--subtitle-color);
+    color: var(--text-dark);
+}
+
+/* --- NEW: Footer --- */
+footer {
+    width: 100%;
+    padding: 2rem 1rem;
+    margin-top: auto; /* Pushes footer to the bottom */
+    text-align: center;
+    border-top: 1px solid var(--border-highlight);
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.social-links a {
+    font-size: 1.75rem; /* 28px */
+    color: var(--text-gray);
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-links a:hover {
+    color: var(--main-orange);
+    transform: scale(1.1);
+}
+
+footer p {
+    font-size: 0.875rem; /* 14px */
+    color: var(--text-gray);
+}
+
+/* --- Media Query for Mobile --- */
+@media (max-width: 900px) {
+    .app-card {
+        flex-direction: column; /* Stack on mobile */
+        padding: 2rem;
+        gap: 2rem;
+        margin: 0 1rem;
+    }
+
+    .text-container {
+        padding-right: 0;
+        text-align: center;
+    }
+
+    .text-container h1 {
+        font-size: 2.25rem; /* 36px */
+    }
+
+    .text-container p {
+        font-size: 1.125rem; /* 18px */
+    }
+}

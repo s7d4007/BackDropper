@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>backdropper</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            <div class="logo-icon"><img src="favicon.svg" alt="logo"></div>
+            <span class="logo-text">backdropper</span>
+        </div>
+    </header>
+
+    <main>
+        <div class="app-card">
+
+            <div class="text-container">
+                <h1>Remove Image Background,</h1>
+                <p>as if it never existed</p>
+            </div>
+
+            <div class="main-content-container">
+
+                <div class="drop-zone-container" id="drop-zone-wrapper">
+                    <label for="file-upload" class="drop-zone">
+                        <span class="drop-icon"><i class="fa-solid fa-cloud-arrow-up"></i></span>
+                        <span class="drop-text">Drag n' Drop</span>
+                        <span class="upload-button">or upload file</span>
+                        <input type="file" id="file-upload" multiple hidden accept="image/png, image/jpeg, image/webp">
+                    </label>
+                </div>
+                <div class="result-container" id="result-wrapper" style="display: none;">
+                    <div class="image-preview-container">
+                        <img src="" alt="Processed Image" id="preview-image">
+                    </div>
+                    <div class="button-container">
+                        <a href="#" id="download-button" class="download-button" download="no-bg.png">
+                            <i class="fa-solid fa-download"></i> Download
+                        </a>
+                        <button id="start-over-button" class="start-over-button">
+                            <i class="fa-solid fa-rotate-left"></i> Start Over
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="social-links">
+            <a href="https://github.com/YOUR-USERNAME" target="_blank" aria-label="GitHub Profile">
+                <i class="fa-brands fa-github"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/YOUR-USERNAME" target="_blank" aria-label="LinkedIn Profile">
+                <i class="fa-brands fa-linkedin"></i>
+            </a>
+        </div>
+        <p>&copy; 2025 backdropper. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
