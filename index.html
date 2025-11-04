@@ -43,6 +43,15 @@
                         <input type="file" id="file-upload" multiple hidden accept="image/png, image/jpeg, image/webp">
                     </label>
                 </div>
+
+                <div class="loader-container" id="loader-wrapper" style="display: none;">
+                    <div class="loader-content">
+                        <i class="fa-solid fa-user loader-icon"></i>
+                        <div class="checkerboard-bg"></div>
+                    </div>
+                    <span class="loader-text">Removing background...</span>
+                </div>
+
                 <div class="result-container" id="result-wrapper" style="display: none;">
                     <div class="image-preview-container">
                         <img src="" alt="Processed Image" id="preview-image">
@@ -75,4 +84,5 @@
     <script src="script.js"></script>
 
 </body>
+
 </html>

@@ -3,16 +3,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropZone = document.querySelector('.drop-zone');
     const fileUpload = document.getElementById('file-upload');
     
-    // Get our new containers
+    // View containers
     const dropZoneWrapper = document.getElementById('drop-zone-wrapper');
     const resultWrapper = document.getElementById('result-wrapper');
+    const loaderWrapper = document.getElementById('loader-wrapper'); // New
     
-    // Get our new result elements
+    // Result elements
     const previewImage = document.getElementById('preview-image');
     const downloadButton = document.getElementById('download-button');
     const startOverButton = document.getElementById('start-over-button');
 
-    // --- Drag and Drop Event Handlers ---
+    // --- Drag and Drop Handlers ---
+    // Prevent browser default behavior
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
         dropZone.addEventListener(eventName, preventDefaults, false);
         document.body.addEventListener(eventName, preventDefaults, false);
@@ -23,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.stopPropagation();
     }
 
+    // Highlight drop zone on drag over
     ['dragenter', 'dragover'].forEach(eventName => {
         dropZone.addEventListener(eventName, highlight, false);
     });
@@ -39,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dropZone.classList.remove('drag-over');
     }
 
+    // Handle file drop
     dropZone.addEventListener('drop', handleDrop, false);
 
     function handleDrop(e) {
@@ -47,18 +51,19 @@ document.addEventListener('DOMContentLoaded', () => {
         handleFiles(files);
     }
 
-    // --- File Input (Click to Upload) Event Handler ---
+    // --- File Input (Click) Handler ---
     fileUpload.addEventListener('change', (e) => {
         handleFiles(e.target.files);
     });
 
-    // --- "Start Over" Button Event Handler ---
+    // --- "Start Over" Button Handler ---
     startOverButton.addEventListener('click', () => {
         // Hide result, show drop zone
         resultWrapper.style.display = 'none';
+        loaderWrapper.style.display = 'none'; // Also hide loader
         dropZoneWrapper.style.display = 'block';
 
-        // Optional: Revoke the old blob URL to free up memory
+        // Revoke the old blob URL to free up memory
         if (previewImage.src) {
             URL.revokeObjectURL(previewImage.src);
         }
@@ -68,9 +73,10 @@ document.addEventListener('DOMContentLoaded', () => {
         downloadButton.href = '';
     });
 
-    // --- File Processing Function ---
+
+    // --- File Processing ---
     function handleFiles(files) {
-        // We'll just process the first file, even if multiple are dropped
+        // Process only the first file
         const file = files[0];
         if (file) {
             uploadFile(file);
@@ -78,29 +84,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Uploads the file to the Python backend and displays the result
-     * @param {File} file - The individual file
+     * Upload file to backend and display result
+     * @param {File} file - The file to process
      */
     function uploadFile(file) {
         console.log(`Processing file: ${file.name}`);
 
-        // --- NEW: Add a loading state ---
-        // You could add a dedicated loading spinner here
-
+        // --- Set loading state ---
         dropZoneWrapper.style.display = 'none';
-        resultWrapper.style.display = 'flex'; // Use 'flex' as set in CSS
-        previewImage.src = ''; // Clear any old image
+        resultWrapper.style.display = 'none';
+        loaderWrapper.style.display = 'flex'; // Show loader
         
         let formData = new FormData();
         formData.append('file', file);
 
+        // --- Send file to backend ---
         fetch('http://127.0.0.1:5000/remove-background', {
             method: 'POST',
             body: formData
         })
         .then(response => {
             if (!response.ok) {
-                // If server sends an error, show it
+                // Pass server error text to catch block
                 return response.text().then(text => { 
                     throw new Error(text || 'Network response was not ok') 
                 });
@@ -108,24 +113,24 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.blob();
         })
         .then(imageBlob => {
-            // --- THIS IS THE KEY PART ---
-            // 1. Create a temporary URL from the image blob
+            // --- Success: Show result ---
+            loaderWrapper.style.display = 'none';
+            resultWrapper.style.display = 'flex';
+
+            // Create temporary URL from the returned blob
             const imageUrl = URL.createObjectURL(imageBlob);
 
-            // 2. Set the image source to this new URL
+            // Set image and download link
             previewImage.src = imageUrl;
-
-            // 3. Set the download button's link to this new URL
             downloadButton.href = imageUrl;
-
-            // 4. (Optional) Set a dynamic download filename
             downloadButton.download = `no-bg-${file.name}`;
-            // -----------------------------
         })
         .catch(error => {
             console.error('Upload error:', error);
             alert(`Error processing file: ${error}`);
-            // If an error happens, go back to the start
+            
+            // --- Error: Reset UI ---
+            // Use startOverButton.click() to reset everything
             startOverButton.click(); 
         });
     }
