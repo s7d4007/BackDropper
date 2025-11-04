@@ -35,14 +35,17 @@
 
             <div class="main-content-container">
 
-                <div class="drop-zone-container" id="drop-zone-wrapper">
-                    <label for="file-upload" class="drop-zone">
-                        <span class="drop-icon"><i class="fa-solid fa-cloud-arrow-up"></i></span>
-                        <span class="drop-text">Drag n' Drop</span>
-                        <span class="upload-button">or upload file</span>
-                        <input type="file" id="file-upload" multiple hidden accept="image/png, image/jpeg, image/webp">
-                    </label>
-                </div>
+               <div class="drop-zone-container" id="drop-zone-wrapper">
+                <label for="file-upload" class="drop-zone" id="drop-zone-label"> <!-- Added an ID here -->
+                    <span class="drop-icon"><i class="fa-solid fa-cloud-arrow-up"></i></span>
+                    <span class="drop-text">Drag n' Drop</span>
+                    <span class="upload-button">or upload file</span>
+                    <!-- Added this new paragraph tag for error-message -->
+                    <p id="error-message" class="error-message"></p>
+
+                    <input type="file" id="file-upload" multiple hidden accept="image/png, image/jpeg, image/webp">
+                </label>
+            </div>
 
                 <div class="loader-container" id="loader-wrapper" style="display: none;">
                     <div class="loader-content">

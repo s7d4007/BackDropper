@@ -165,6 +165,32 @@ main {
     transition: transform 0.2s ease;
 }
 
+/*---Error Message Styles --- */
+.error-message {
+    display: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #EF4444;
+    background-color: #FEF2F2; 
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 300px; /* Setting max-width upto which it can grow */
+    line-height: 1.4;
+}
+
+/* When the drop-zone has an error, show the message */
+.drop-zone.has-error .error-message {
+    display: block;
+}
+
+/* Also make the border red */
+.drop-zone.has-error {
+    border-color: #EF4444;
+    border-style: solid;
+}
+
 .drop-zone:hover .upload-button {
     transform: scale(1.05);
 }

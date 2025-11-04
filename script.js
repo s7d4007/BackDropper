@@ -2,19 +2,37 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Get DOM Elements ---
     const dropZone = document.querySelector('.drop-zone');
     const fileUpload = document.getElementById('file-upload');
+    const dropZoneLabel = document.getElementById('drop-zone-label'); // New
+    const errorMessage = document.getElementById('error-message'); // New
     
     // View containers
     const dropZoneWrapper = document.getElementById('drop-zone-wrapper');
     const resultWrapper = document.getElementById('result-wrapper');
-    const loaderWrapper = document.getElementById('loader-wrapper'); // New
+    const loaderWrapper = document.getElementById('loader-wrapper');
     
     // Result elements
     const previewImage = document.getElementById('preview-image');
     const downloadButton = document.getElementById('download-button');
     const startOverButton = document.getElementById('start-over-button');
 
+    // --- NEW: Error Handling Functions ---
+    function showError(message) {
+        // Set the error text and make it visible
+        errorMessage.textContent = message;
+        dropZoneLabel.classList.add('has-error');
+
+        // Reset the UI to the drop-zone state
+        loaderWrapper.style.display = 'none';
+        resultWrapper.style.display = 'none';
+        dropZoneWrapper.style.display = 'block';
+    }
+
+    function hideError() {
+        errorMessage.textContent = '';
+        dropZoneLabel.classList.remove('has-error');
+    }
+
     // --- Drag and Drop Handlers ---
-    // Prevent browser default behavior
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
         dropZone.addEventListener(eventName, preventDefaults, false);
         document.body.addEventListener(eventName, preventDefaults, false);
@@ -25,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
         e.stopPropagation();
     }
 
-    // Highlight drop zone on drag over
     ['dragenter', 'dragover'].forEach(eventName => {
         dropZone.addEventListener(eventName, highlight, false);
     });
@@ -42,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
         dropZone.classList.remove('drag-over');
     }
 
-    // Handle file drop
     dropZone.addEventListener('drop', handleDrop, false);
 
     function handleDrop(e) {
@@ -60,8 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
     startOverButton.addEventListener('click', () => {
         // Hide result, show drop zone
         resultWrapper.style.display = 'none';
-        loaderWrapper.style.display = 'none'; // Also hide loader
+        loaderWrapper.style.display = 'none';
         dropZoneWrapper.style.display = 'block';
+
+        hideError(); // Clear any errors
 
         // Revoke the old blob URL to free up memory
         if (previewImage.src) {
@@ -78,9 +96,20 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleFiles(files) {
         // Process only the first file
         const file = files[0];
-        if (file) {
-            uploadFile(file);
+        if (!file) {
+            return;
         }
+
+        // --- NEW: Frontend File Validation ---
+        const validImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        if (!validImageTypes.includes(file.type)) {
+            showError('Please upload a valid image (PNG, JPG, or WEBP).');
+            return; // Stop the upload
+        }
+        // ------------------------------------
+        
+        hideError(); // Clear error from previous attempt
+        uploadFile(file);
     }
 
     /**
@@ -89,11 +118,12 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function uploadFile(file) {
         console.log(`Processing file: ${file.name}`);
+        hideError(); // Clear any previous errors
 
         // --- Set loading state ---
         dropZoneWrapper.style.display = 'none';
         resultWrapper.style.display = 'none';
-        loaderWrapper.style.display = 'flex'; // Show loader
+        loaderWrapper.style.display = 'flex';
         
         let formData = new FormData();
         formData.append('file', file);
@@ -105,7 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(response => {
             if (!response.ok) {
-                // Pass server error text to catch block
                 return response.text().then(text => { 
                     throw new Error(text || 'Network response was not ok') 
                 });
@@ -117,21 +146,26 @@ document.addEventListener('DOMContentLoaded', () => {
             loaderWrapper.style.display = 'none';
             resultWrapper.style.display = 'flex';
 
-            // Create temporary URL from the returned blob
             const imageUrl = URL.createObjectURL(imageBlob);
 
-            // Set image and download link
             previewImage.src = imageUrl;
             downloadButton.href = imageUrl;
             downloadButton.download = `no-bg-${file.name}`;
         })
         .catch(error => {
             console.error('Upload error:', error);
-            alert(`Error processing file: ${error}`);
             
-            // --- Error: Reset UI ---
-            // Use startOverButton.click() to reset everything
-            startOverButton.click(); 
+            // --- NEW: Show error in UI instead of alert ---
+            // We'll show the server's error message if it's not too generic
+            let friendlyMessage = 'Error processing file. Please try again.';
+            if (error.message && !error.message.includes('Network response') && !error.message.includes('Failed to fetch')) {
+                friendlyMessage = error.message;
+            } else if (error.message.includes('Failed to fetch')) {
+                friendlyMessage = 'Cannot connect to server. Is it running?';
+            }
+            showError(friendlyMessage);
+            // ----------------------------------------------
         });
     }
 });
+
