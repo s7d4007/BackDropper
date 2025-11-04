@@ -49,7 +49,7 @@ header {
 .logo-text {
     font-size: 2.25rem;
     font-weight: 700;
-    color: var(--logo-text-color);
+    color: var(--main-orange);
     line-height: 1;
 }
 
