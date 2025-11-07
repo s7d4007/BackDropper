@@ -4,12 +4,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileUpload = document.getElementById('file-upload');
     const dropZoneLabel = document.getElementById('drop-zone-label'); // New
     const errorMessage = document.getElementById('error-message'); // New
-    
+
     // View containers
     const dropZoneWrapper = document.getElementById('drop-zone-wrapper');
     const resultWrapper = document.getElementById('result-wrapper');
     const loaderWrapper = document.getElementById('loader-wrapper');
-    
+
     // Result elements
     const previewImage = document.getElementById('preview-image');
     const downloadButton = document.getElementById('download-button');
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (previewImage.src) {
             URL.revokeObjectURL(previewImage.src);
         }
-        
+
         // Clear old image and download link
         previewImage.src = '';
         downloadButton.href = '';
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return; // Stop the upload
         }
         // ------------------------------------
-        
+
         hideError(); // Clear error from previous attempt
         uploadFile(file);
     }
@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dropZoneWrapper.style.display = 'none';
         resultWrapper.style.display = 'none';
         loaderWrapper.style.display = 'flex';
-        
+
         let formData = new FormData();
         formData.append('file', file);
 
@@ -133,39 +133,37 @@ document.addEventListener('DOMContentLoaded', () => {
             method: 'POST',
             body: formData
         })
-        .then(response => {
-            if (!response.ok) {
-                return response.text().then(text => { 
-                    throw new Error(text || 'Network response was not ok') 
-                });
-            }
-            return response.blob();
-        })
-        .then(imageBlob => {
-            // --- Success: Show result ---
-            loaderWrapper.style.display = 'none';
-            resultWrapper.style.display = 'flex';
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(text || 'Network response was not ok')
+                    });
+                }
+                return response.blob();
+            })
+            .then(imageBlob => {
+                // --- Success: Show result ---
+                loaderWrapper.style.display = 'none';
+                resultWrapper.style.display = 'flex';
 
-            const imageUrl = URL.createObjectURL(imageBlob);
+                const imageUrl = URL.createObjectURL(imageBlob);
 
-            previewImage.src = imageUrl;
-            downloadButton.href = imageUrl;
-            downloadButton.download = `no-bg-${file.name}`;
-        })
-        .catch(error => {
-            console.error('Upload error:', error);
-            
-            // --- NEW: Show error in UI instead of alert ---
-            // We'll show the server's error message if it's not too generic
-            let friendlyMessage = 'Error processing file. Please try again.';
-            if (error.message && !error.message.includes('Network response') && !error.message.includes('Failed to fetch')) {
-                friendlyMessage = error.message;
-            } else if (error.message.includes('Failed to fetch')) {
-                friendlyMessage = 'Cannot connect to server. Is it running?';
-            }
-            showError(friendlyMessage);
-            // ----------------------------------------------
-        });
+                previewImage.src = imageUrl;
+                downloadButton.href = imageUrl;
+                downloadButton.download = `no-bg-${file.name}`;
+            })
+            .catch(error => {
+                console.error('Upload error:', error);
+                // Friendly Error Messages
+                let friendlyMessage = 'Error processing file. Please try again.';
+                if (error.message && !error.message.includes('Network response') && !error.message.includes('Failed to fetch')) {
+                    friendlyMessage = error.message;
+                } else if (error.message.includes('Failed to fetch')) {
+                    friendlyMessage = 'Looks like our server took a coffee 🍵 break without telling us.';
+                }
+                showError(friendlyMessage);
+                // ----------------------------------------------
+            });
     }
 });
 
