@@ -6,7 +6,7 @@
     --white: #FFFFFF;
     --page-bg: #FFFBF8;
     --border-highlight: #FFF4EE;
-    --light-gray: #E5E7EB; 
+    --light-gray: #E5E7EB;
     --text-gray: #6B7280;
     --text-dark: #374151;
 }
@@ -62,14 +62,12 @@ main {
     padding: 4rem 2rem;
 }
 
-/* --- NEW: App Card --- */
-/* This is the new wrapper for your app */
+/* --- App Card --- */
 .app-card {
     width: 100%;
-    max-width: 960px; /* Wider card for side-by-side */
+    max-width: 960px;
     background-color: var(--white);
-    border-radius: 1.5rem; /* 24px */
-    /* A soft, modern shadow using your brand color */
+    border-radius: 1.5rem;
     box-shadow: 0 20px 40px -10px rgba(249, 115, 22, 0.1);
     padding: 3rem;
     display: flex;
@@ -80,7 +78,7 @@ main {
 
 .text-container,
 .main-content-container {
-    flex: 1; /* Each side takes up half the space */
+    flex: 1;
 }
 
 /* --- Left-Side Text --- */
@@ -89,14 +87,14 @@ main {
 }
 
 .text-container h1 {
-    font-size: 3rem; /* 48px */
+    font-size: 3rem;
     font-weight: 700;
     color: var(--main-orange);
     line-height: 1.2;
 }
 
 .text-container p {
-    font-size: 1.5rem; /* 24px */
+    font-size: 1.5rem;
     font-weight: 400;
     color: var(--subtitle-color);
     font-style: italic;
@@ -106,7 +104,7 @@ main {
 /* --- Right-Side Uploader --- */
 .main-content-container {
     width: 100%;
-    max-width: 400px; /* Constrain the uploader width */
+    max-width: 400px;
 }
 
 /* --- Drop Zone --- */
@@ -114,7 +112,7 @@ main {
     width: 100%;
     max-width: 400px;
     aspect-ratio: 1 / 1;
-    border: 2px dashed var(--light-gray); 
+    border: 2px dashed var(--light-gray);
     border-radius: 1rem;
     display: flex;
     flex-direction: column;
@@ -165,36 +163,95 @@ main {
     transition: transform 0.2s ease;
 }
 
-/*---Error Message Styles --- */
+.drop-zone:hover .upload-button {
+    transform: scale(1.05);
+}
+
+/* --- Error Message Styles --- */
 .error-message {
     display: none;
     font-size: 0.875rem;
     font-weight: 600;
     color: #EF4444;
-    background-color: #FEF2F2; 
+    background-color: #FEF2F2;
     border-radius: 0.5rem;
     padding: 0.75rem;
     margin-top: 1rem;
     width: 100%;
-    max-width: 300px; /* Setting max-width upto which it can grow */
+    max-width: 300px;
     line-height: 1.4;
 }
 
-/* When the drop-zone has an error, show the message */
 .drop-zone.has-error .error-message {
     display: block;
 }
 
-/* Also make the border red */
 .drop-zone.has-error {
     border-color: #EF4444;
     border-style: solid;
 }
 
-.drop-zone:hover .upload-button {
-    transform: scale(1.05);
+/* --- Loader (State 1.5) --- */
+.loader-container {
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 1 / 1;
+    border: 2px dashed var(--light-gray);
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #fafafa;
+    overflow: hidden;
 }
 
+.loader-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loader-icon {
+    font-size: 8rem;
+    color: var(--main-orange);
+    mix-blend-mode: darken; 
+    position: relative;
+    z-index: 2;
+}
+
+.checkerboard-bg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background-image: 
+        linear-gradient(45deg, #e0e0e0 25%, transparent 25%), 
+        linear-gradient(-45deg, #e0e0e0 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #e0e0e0 75%),
+        linear-gradient(-45deg, transparent 75%, #e0e0e0 75%);
+    background-size: 40px 40px;
+    background-position: 0 0;
+    animation: slideCheckerboard 2s linear infinite;
+}
+
+@keyframes slideCheckerboard {
+    from { background-position: 0 0; }
+    to { background-position: -80px 0; }
+}
+
+.loader-text {
+    margin-top: 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+/* --- Result Display (State 2) --- */
 .result-container {
     width: 100%;
     display: flex;
@@ -240,7 +297,7 @@ main {
     border-radius: 0.5rem;
     cursor: pointer;
     transition: all 0.2s ease;
-    display: flex; 
+    display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
@@ -269,89 +326,30 @@ main {
     color: var(--text-dark);
 }
 
-.loader-container {
+/* --- Footer Styles --- */
+footer {
     width: 100%;
-    max-width: 400px;
-    aspect-ratio: 1 / 1;
-    border: 2px dashed var(--light-gray);
-    border-radius: 1rem;
+    padding: 2.5rem 1rem;
+    margin-top: auto;
+    text-align: center;
+    background-color: var(--border-highlight);
+    border-top: 1px solid var(--main-orange);
+    box-shadow: 0 -5px 15px -5px rgba(0, 0, 0, 0.03);
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    text-align: center;
-    background-color: #fafafa;
-    overflow: hidden;
-}
-
-.loader-content {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.loader-icon {
-    font-size: 8rem;
-    color: var(--main-orange);
-    mix-blend-mode: darken; 
-    position: relative;
-    z-index: 2;
-}
-
-.checkerboard-bg {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1; 
-    background-image: 
-        linear-gradient(45deg, #e0e0e0 25%, transparent 25%), 
-        linear-gradient(-45deg, #e0e0e0 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #e0e0e0 75%),
-        linear-gradient(-45deg, transparent 75%, #e0e0e0 75%);
-    background-size: 40px 40px;
-    background-position: 0 0;
-
-    /* Animate the background-position to make it move */
-    animation: slideCheckerboard 2s linear infinite;
-}
-
-/* The animation keyframes */
-@keyframes slideCheckerboard {
-    from {
-        background-position: 0 0;
-    }
-    to {
-        background-position: -80px 0;
-    }
-}
-
-.loader-text {
-    margin-top: 1.5rem;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--text-dark);
-}
-
-footer {
-    width: 100%;
-    padding: 2rem 1rem;
-    margin-top: auto; /* Pushes footer to the bottom */
-    text-align: center;
-    border-top: 1px solid var(--border-highlight);
+    gap: 1.25rem;
 }
 
 .social-links {
     display: flex;
     justify-content: center;
-    gap: 1.5rem;
-    margin-bottom: 1rem;
+    gap: 1.75rem;
+    margin-bottom: 0;
 }
 
 .social-links a {
-    font-size: 1.75rem; /* 28px */
+    font-size: 1.75rem;
     color: var(--text-gray);
     transition: color 0.3s ease, transform 0.3s ease;
 }
@@ -361,15 +359,44 @@ footer {
     transform: scale(1.1);
 }
 
-footer p {
-    font-size: 0.875rem; /* 14px */
+.footer-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.footer-links a {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-gray);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: var(--main-orange);
+    text-decoration: underline;
+}
+
+.footer-made-with {
+    font-size: 0.875rem;
     color: var(--text-gray);
 }
+
+.footer-made-with .fa-heart { color: #EF4444; }
+.footer-made-with .fa-python { color: #3B82F6; }
+.footer-made-with .fa-js { color: #FBBF24; }
+
+p.copyright {
+    font-size: 0.875rem;
+    color: var(--text-gray);
+    margin-top: 1rem;
+}
+
 
 /* --- Media Query for Mobile --- */
 @media (max-width: 900px) {
     .app-card {
-        flex-direction: column; /* Stack on mobile */
+        flex-direction: column;
         padding: 2rem;
         gap: 2rem;
         margin: 0 1rem;
@@ -381,10 +408,14 @@ footer p {
     }
 
     .text-container h1 {
-        font-size: 2.25rem; /* 36px */
+        font-size: 2.25rem;
     }
 
     .text-container p {
-        font-size: 1.125rem; /* 18px */
+        font-size: 1.125rem;
+    }
+
+    header {
+        padding: 1rem 1.5rem;
     }
 }
